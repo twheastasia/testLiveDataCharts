@@ -9,7 +9,6 @@ class WelcomeController < ApplicationController
     if @data.length() == 0
       generateData
     end
-    @currentData = getData
   end
 
   def generateData
