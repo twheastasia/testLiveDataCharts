@@ -18,6 +18,8 @@
                     // set up the updating of the chart each second
                     var series = this.series[0];
                     setInterval(function () {
+                        $.get('abc', function(data){
+			    });
                         var second = (new Date()).getTime(); // current time
                         //y = Math.random();
                         //$("p#time").text(x);
