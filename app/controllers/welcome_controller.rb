@@ -23,5 +23,12 @@ class WelcomeController < ApplicationController
     currentData = @data[currentSeconds.to_s]
     return currentSeconds*1000, currentData
   end
+  
+  def create 
+    return 20
+  end
 
+  def new
+    return 20
+  end
 end

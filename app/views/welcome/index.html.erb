@@ -16,18 +16,15 @@
                 load: function () {
 
                     // set up the updating of the chart each second
-                    var series = this.series[0];
+		    var series = this.series[0];
                     setInterval(function () {
-                        $.get('abc', function(data){
-			    });
-                        var second = (new Date()).getTime(); // current time
-                        //y = Math.random();
-                        //$("p#time").text(x);
-                        //var y = <%= @count %>;
-                        var x = second;
-                        var y = "<%= @data["+second/1000 +"] %>";
-                        $("p#time").text("x: "+x + "   y: "+y);
-                        series.addPoint([x, y], true, true);
+                        $.get('http://192.168.199.180:3000/livedata', function(data){
+                              var second = (new Date()).getTime(); // current time
+                              var x = second;
+			      var y = data;
+			      $("p#time").text("x: "+x + "   y: "+y);
+                              series.addPoint([x, y], true, true);
+                        });
                     }, 1000);
                 }
             }

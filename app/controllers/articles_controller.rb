@@ -5,6 +5,8 @@ class ArticlesController < ApplicationController
 
       @article = Article.new
     end
+
+    skip_before_filter :verify_authenticity_token, :only => [:create]
     def create
       # render plain: params[:article].inspect
       @article = Article.new(article_params)
@@ -14,6 +16,7 @@ class ArticlesController < ApplicationController
       else
         render 'new'
       end
+      puts "----"
     end
 
     def show
