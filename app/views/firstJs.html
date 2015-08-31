@@ -3,11 +3,15 @@
 	<meta content="authenticity_token" name="csrf-param" />
 	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
         <script type="text/javascript">
-            setInterval(function () {
-                        $.ajax({ 
+
+		    $(document).ready(function(){
+			    $("button").click(function(){
+				    // $("p").css("background-color","red");
+				    $("p").hide();
+				    $.ajax({ 
 							type: "post", 
-							url: "http://192.168.199.180:3000/articles", 
-							data: {"title":"10", "text":"sadfa"}, 
+							url: "http://192.168.199.180:3001/livedata", 
+							data: {"cpu":"31"}, 
 							//contentType一定只能设置成以下格式，否则会有问题，具体原因请参考：http://blog.csdn.net/mhmyqn/article/details/25561535
 							//contentType: "application/x-www-form-urlencoded", 
 							//headers: { 'Access-Control-Allow-Origin': '*'},
@@ -24,13 +28,7 @@
 
 				
 							}
-			});	
-                    }, 1000);
-
-		    $(document).ready(function(){
-			    $("button").click(function(){
-				  // $("p").css("background-color","red");
-				  $("p").hide();
+					});	
 		        });
 		});
 	</script>

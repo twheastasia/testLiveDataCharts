@@ -18,7 +18,7 @@
                     // set up the updating of the chart each second
 		    var series = this.series[0];
                     setInterval(function () {
-                        $.get('http://192.168.199.180:3000/livedata', function(data){
+                        $.get('http://192.168.199.180:3001/livedata', function(data){
                               var second = (new Date()).getTime(); // current time
                               var x = second;
 			      var y = data;
