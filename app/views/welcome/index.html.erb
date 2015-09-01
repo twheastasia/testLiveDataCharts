@@ -1,13 +1,19 @@
 <h1>Welcome#index</h1>
 <p>Find me in app/views/welcome/index.html.erb</p>
 <%= link_to 'My Blog', controller: 'articles' %>
-<div id="container" style="width: 600px; height: 400px"></div>
-<p id="time">time</p>
+<div id="cpu_container" style="width: 1500px; height: 200px"></div>
+<p id="cpu"></P>
+<div id="memory_container" style="width: 1500px; height: 200px"></div>
+<p id="memory"></P>
+<div id="flow_container" style="width: 1500px; height: 200px"></div>
+<p id="flow"></P>
+
 <script type="text/javascript" charset="utf-8">
   $(function () {
     new Highcharts.Chart({
+    //$('div#cpu_container').highcharts({
         chart: {
-            renderTo: 'container',
+            renderTo: 'cpu_container',
             //alignTicks: false,
             type: 'spline',
             animation: Highcharts.svg, // don't animate in old IE
@@ -18,11 +24,14 @@
                     // set up the updating of the chart each second
 		    var series = this.series[0];
                     setInterval(function () {
-                        $.get('http://192.168.199.180:3001/livedata', function(data){
-                              var second = (new Date()).getTime(); // current time
+                        $.get('<%= @url %>', function(data){
+                              var date = new Date();
+                              var second = date.getTime() - date.getTimezoneOffset()*60000 ; // current time
                               var x = second;
-			      var y = data;
-			      $("p#time").text("x: "+x + "   y: "+y);
+			                  var y = parseInt(data["cpu"]);
+                              //var y = data;
+                              //console.log(typeof(y));
+			                  $("p#cpu").text("x: " + x + " y: "+y);
                               series.addPoint([x, y], true, true);
                         });
                     }, 1000);
@@ -30,7 +39,7 @@
             }
         },
         title: {
-                text: 'Live random data'
+                text: 'CPU'
             },
             xAxis: {
                 type: 'datetime',
@@ -38,7 +47,7 @@
             },
             yAxis: {
                 title: {
-                    text: 'Value'
+                    text: 'Percentage'
                 },
                 plotLines: [{
                     value: 0,
@@ -64,7 +73,7 @@
                 data: (function () {
                     // generate an array of random data
                     var data = [],
-                        time = (new Date()).getTime(),
+                        time = (new Date()).getTime() - (new Date()).getTimezoneOffset()*60000,
                         i;
 
                     for (i = -19; i <= 0; i += 1) {
@@ -77,5 +86,152 @@
                 }())
         }]
     });
+    new Highcharts.Chart({
+        chart: {
+            renderTo: 'memory_container',
+            //alignTicks: false,
+            type: 'spline',
+            animation: Highcharts.svg, // don't animate in old IE
+            marginRight: 10,
+            events: {
+                load: function () {
+
+                    // set up the updating of the chart each second
+            var series = this.series[0];
+                    setInterval(function () {
+                        $.get("<%= @url %>", function(data){
+                              var date = new Date();
+                              var second = date.getTime() - date.getTimezoneOffset()*60000 ; // current time
+                              var x = second;
+                              var y = parseInt(data["memory"]);
+                              $("p#memory").text("x: "+x + "   y: "+y);
+                              series.addPoint([x, y], true, true);
+                        });
+                    }, 1000);
+                }
+            }
+        },
+        title: {
+                text: 'MEMORY(PSS)'
+            },
+            xAxis: {
+                type: 'datetime',
+                tickPixelInterval: 150
+            },
+            yAxis: {
+                title: {
+                    text: 'KB'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                        Highcharts.numberFormat(this.y, 2);
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            exporting: {
+                enabled: true
+            },
+            series: [{
+                name: 'Random data',
+                data: (function () {
+                    // generate an array of random data
+                    var data = [],
+                        time = (new Date()).getTime() - (new Date()).getTimezoneOffset()*60000,
+                        i;
+
+                    for (i = -19; i <= 0; i += 1) {
+                        data.push({
+                            x: time + i * 1000,
+                            y: Math.random()
+                        });
+                    }
+                    return data;
+                }())
+        }]
+    });
+    new Highcharts.Chart({
+        chart: {
+            renderTo: 'flow_container',
+            //alignTicks: false,
+            type: 'spline',
+            animation: Highcharts.svg, // don't animate in old IE
+            marginRight: 10,
+            events: {
+                load: function () {
+
+                    // set up the updating of the chart each second
+            var series = this.series[0];
+                    setInterval(function () {
+                        $.get("<%= @url %> ", function(data){
+                              var date = new Date();
+                              var second = date.getTime() - date.getTimezoneOffset()*60000 ;// current time
+                              var x = second;
+                              var y = parseInt(data["flow"]);
+                              $("p#flow").text("x: "+x + "   y: "+y);
+                              series.addPoint([x, y], true, true);
+                        });
+                    }, 1000);
+                }
+            }
+        },
+        title: {
+                text: 'FLOW'
+            },
+            xAxis: {
+                type: 'datetime',
+                tickPixelInterval: 150
+            },
+            yAxis: {
+                title: {
+                    text: 'KB/S'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                        Highcharts.numberFormat(this.y, 2);
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            exporting: {
+                enabled: true
+            },
+            series: [{
+                name: 'Random data',
+                data: (function () {
+                    // generate an array of random data
+                    var data = [],
+                        time = (new Date()).getTime() - (new Date()).getTimezoneOffset()*60000,
+                        i;
+
+                    for (i = -19; i <= 0; i += 1) {
+                        data.push({
+                            x: time + i * 1000,
+                            y: Math.random()
+                        });
+                    }
+                    return data;
+                }())
+        }]
+    });
+
 });
 </script>

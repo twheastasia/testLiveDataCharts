@@ -2,6 +2,7 @@ class WelcomeController < ApplicationController
   
   #@data = Hash.new
   #require 'Math'
+  @@post_url = 'http://192.168.199.180:3001/livedata'
 
   def index
     @count = 20
@@ -9,6 +10,7 @@ class WelcomeController < ApplicationController
     if @data.length() == 0
       generateData
     end
+    @url = @@post_url
   end
 
   def generateData
